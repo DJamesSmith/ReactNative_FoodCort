@@ -14,6 +14,7 @@ export const Colors = {
     transparent: 'transparent',
     orange: '#F86A2E',
     violet: '#4552CB',
+    darkBG: '#292929',
 
     // Dark
     darkBlue: '#1a237e',
@@ -32,16 +33,20 @@ export const Colors = {
     lightBlue: '#ebf6fb',
     lightGreen: '#b9f6ca',
     lightPurple: '#C7B2FF',
-    lightOrange: '#ffd180',
     lightTeal: '#b2dfdb',
     lightAmber: '#ffecb3',
     lightBrown: '#d7ccc8',
     lightBlueGrey: '#cfd8dc',
     lightIndigo: '#c5cae9',
     lightPink: '#f8bbd0',
-
+    lightOrange1: '#e65100',
+    lightOrange2: '#ffcc80',
+    lightOrange3: '#ffe0b2',
 
     // Custom
-    customBlue: '#81D4FA',
+    customBlue1: '#81D4FA',
+    customBlue2: '#e3f2fd',
+
+
 }
 

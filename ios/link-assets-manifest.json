@@ -2,6 +2,10 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/fonts/CaveatBrush-Regular.ttf",
+      "sha1": "a03e2809432bf3a5aaa49e05a90b85325ed1c022"
+    },
+    {
       "path": "src/assets/fonts/SF-Compact-Rounded-Bold.ttf",
       "sha1": "69a11a898d8f73054909cfb9ce1f9d10d7744eb6"
     },

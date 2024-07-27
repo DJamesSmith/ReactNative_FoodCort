@@ -1,23 +1,54 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet, SafeAreaView } from 'react-native'
-import React from 'react'
-import { Icons } from '../../themes/Icons'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ImageBackground, Dimensions, Animated } from 'react-native'
+import React, { useRef } from 'react'
 import { Colors } from '../../themes/Colors'
-import { NavigationContainer } from '@react-navigation/native'
-import MyStatusBar from '../../utils/MyStatusBar'
+import RenderMain from '../../components/home/RenderMain'
+import HeaderComponent from '../../components/home/HeaderComponent'
+import { Icons } from '../../themes/Icons'
+import CustomHeader from '../../components/CustomHeader'
+import NetworkStatus from '../../utils/helpers/NetworkStatus'
+
+const { width, height } = Dimensions.get('screen')
 
 const Home = ({ navigation }) => {
+
+    const scrollY = useRef(new Animated.Value(0)).current
+
     return (
-        <SafeAreaView style={styles.container}>
-            <MyStatusBar backgroundColor={Colors.white} barStyle={'dark-content'} />
-            <TouchableOpacity
-                style={styles.btnMenu}
-                onPress={() => navigation.openDrawer()}>
-                <Image
-                    source={Icons.menu}
-                    style={styles.imgBack}
+        <NetworkStatus homeTitle={`Home`}>
+            <View style={styles.container}>
+
+                {/* Header contains SliderBox & Search */}
+                {/* RenderMain contains Category, "HotDeals", Ad & "TOTW" */}
+                <FlatList
+                    data={[0]}
+                    keyExtractor={(item, index) => index.toString()}
+                    ListHeaderComponent={HeaderComponent}
+                    ListHeaderComponentStyle={styles.flatlistHeaderContainer}
+                    renderItem={({ item }) => <RenderMain navigation={navigation} />}
+                    onScroll={Animated.event(
+                        [{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false }
+                    )}
                 />
-            </TouchableOpacity>
-        </SafeAreaView>
+
+                <CustomHeader
+                    doubleTitle
+                    upTitle={`Location`}
+                    imgDownIcon={`https://cdn-icons-png.flaticon.com/128/4178/4178437.png`}
+                    downTitle={`San Diego, CA`}
+
+                    leftIcon={Icons.menu}
+                    leftIconSize={25}
+                    leftIconTintColor={Colors.grey}
+                    onLeftPress={() => navigation.openDrawer()}
+
+                    rightIcon={Icons.notification}
+                    rightIconSize={25}
+                    rightIconTintColor={Colors.grey}
+                    onRightPress={() => navigation.navigate(`Notifications`)}
+                    scrollY={scrollY}
+                />
+            </View>
+        </NetworkStatus>
     )
 }
 
@@ -26,21 +57,21 @@ export default Home
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.white,
-        flex: 1
+        flex: 1,
+
     },
-    btnMenu: {
-        backgroundColor: Colors.mediumGrey,
-        height: 40,
-        width: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 20,
-        marginHorizontal: 20,
-        marginTop: 40,
+    headerBar: {
+        // backgroundColor: Colors.black,
+        width: '100%',
+        position: 'absolute',
+        top: 0,
+        zIndex: 1,
+        paddingTop: 40
     },
-    imgBack: {
-        height: 20,
-        width: 20,
-        resizeMode: 'contain'
+    flatlistHeaderContainer: {
+
     },
+    flatlistFooterContainer: {
+
+    }
 })

@@ -24,7 +24,7 @@ const Splash = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <MyStatusBar backgroundColor={Colors.transparent} barStyle={'dark-content'} />
+            <MyStatusBar backgroundColor={Colors.orange} barStyle={'dark-content'} />
 
             {circles.map((circle, index) => (
                 <View key={index} style={[styles.circle, { width: circle.size, height: circle.size, opacity: circle.opacity }]}>

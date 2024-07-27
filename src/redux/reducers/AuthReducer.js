@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     status: '',
@@ -214,6 +214,6 @@ export const {
     logoutRequest,
     logoutSuccess,
     logoutFailure,
-} = AuthSlice.actions;
+} = AuthSlice.actions
 
 export default AuthSlice.reducer

@@ -12,7 +12,8 @@ const CustomTextInput = ({
     secureTextEntry,
     keyboardType,
     label,
-    validationIcon
+    fontSize = 15,
+    fontFamily = Fonts.SF_Compact_Rounded_Regular,
 }) => {
 
     const [isFocused, setIsFocused] = useState(false)
@@ -20,7 +21,7 @@ const CustomTextInput = ({
     const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
     const togglePasswordVisibility = () => {
-        setIsPasswordVisible(!isPasswordVisible);
+        setIsPasswordVisible(!isPasswordVisible)
     }
 
     return (
@@ -75,11 +76,11 @@ const CustomTextInput = ({
                         // backgroundColor: Colors.red,
                         flex: 1,
                         color: 'black',
-                        fontSize: 15,
+                        fontSize: fontSize,
                         fontWeight: '400',
                         paddingHorizontal: 10,
                         height: '100%',
-                        fontFamily: Fonts.SF_Compact_Rounded_Regular,
+                        fontFamily: fontFamily,
                         letterSpacing: secureTextEntry && (!isPasswordVisible && value.length > 0 ? 4 : 0) ? 4 : 0,
                     }}
                     value={value}

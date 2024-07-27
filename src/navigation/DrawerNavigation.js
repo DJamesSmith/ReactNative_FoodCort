@@ -2,16 +2,17 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator } from '@react-navigation/drawer'
 
-import ChatPage from '../screens/main/Chat'
-import FriendsPage from '../screens/main/Friends'
-import AppPreferencesPage from '../screens/main/AppPreferences'
-import SupportFeedbackPage from '../screens/main/SupportFeedback'
-import SettingsPage from '../screens/main/Settings'
+import Chat from '../screens/main/Chat'
+import Restaurants from '../screens/main/Restaurants'
+import AppPreferences from '../screens/main/AppPreferences'
+import SupportFeedback from '../screens/main/SupportFeedback'
+import Settings from '../screens/main/Settings'
 import { Colors } from '../themes/Colors'
 import TabBarNavigation from './TabBarNavigation'
-import constants from '../utils/helpers/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { logoutRequest } from '../redux/reducers/AuthReducer'
+import isInternetConnected from '../utils/helpers/NetInfo'
+import showErrorAlert from '../utils/helpers/Toast'
 import { getUserDetailsRequest } from '../redux/reducers/UserReducer'
 import { useIsFocused } from '@react-navigation/native'
 import { Icons } from '../themes/Icons'
@@ -36,19 +37,25 @@ const Help = () => {
 }
 
 const LogoutButton = () => {
-    const handleLogout = () => dispatch(logoutRequest())
     const dispatch = useDispatch()
+    const handleLogout = () => {
+        isInternetConnected()
+            .then(() => {
+                dispatch(logoutRequest())
+            })
+            .catch(err => showErrorAlert(`Please connect to the internet to correct the ${err} status of your network`, Colors.red))
+    }
 
     return (
         <TouchableOpacity onPress={handleLogout} activeOpacity={0.7}>
             <View style={[styles.viewButton, { backgroundColor: Colors.transparent }]}>
                 <View style={styles.imgBtnContainer}>
                     <Image
-                        source={Icons.logout}
-                        style={styles.imgBtn}
+                        source={Icons.logoutFill}
+                        style={[styles.imgBtn, { tintColor: Colors.red }]}
                     />
                 </View>
-                <Text style={{ fontSize: 18, color: Colors.grey, fontWeight: 'bold' }}>Log out</Text>
+                <Text style={{ fontSize: 18, color: Colors.red, fontWeight: 'bold' }}>Log out</Text>
             </View>
         </TouchableOpacity>
     )
@@ -88,17 +95,18 @@ const CustomDrawer = props => {
         }
     }
 
-    console.log(`ImageURL ----> ${userDetails?.profile_pic}`)
+    // console.log(`ImageURL ----> ${userDetails?.profile_pic}`)
 
     return (
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.header}>
                     <Image
-                        source={{ uri: userDetails?.profile_pic ? constants.PROFILE_PIC_URL.concat(userDetails?.profile_pic) : `https://cdn-icons-png.flaticon.com/128/847/847969.png` }}
+                        source={{ uri: userDetails?.profile_pic ? `data:image/jpeg;base64,${userDetails.profile_pic}` : `https://cdn-icons-png.flaticon.com/128/847/847969.png` }}
                         style={styles.imgProfileCircle}
                     />
-                    <Text style={styles.text}>{userDetails?.first_name + ' ' + userDetails?.last_name}</Text>
+                    {/* <Text style={styles.text}>{userDetails?.first_name + ' ' + userDetails?.last_name}</Text> */}
+                    <Text style={styles.textName}>{userDetails?.first_name ? userDetails?.first_name + ' ' : ''} {userDetails?.last_name ? userDetails?.last_name : ''}</Text>
                 </View>
 
                 <DrawerItemList {...props} />
@@ -113,12 +121,12 @@ const CustomDrawer = props => {
 const DrawerNavigation = () => {
 
     const drawerItem = [
-        { name: 'Dashboard', componentName: TabBarNavigation, iconImg: 'https://cdn-icons-png.flaticon.com/128/3388/3388856.png' },
-        { name: 'Chat', componentName: ChatPage, iconImg: 'https://cdn-icons-png.flaticon.com/128/566/566769.png' },
-        { name: 'Friends', componentName: FriendsPage, iconImg: 'https://cdn-icons-png.flaticon.com/128/3220/3220829.png' },
-        { name: 'App Preferences', componentName: AppPreferencesPage, iconImg: 'https://cdn-icons-png.flaticon.com/128/10932/10932248.png' },
-        { name: 'Support & Feedback', componentName: SupportFeedbackPage, iconImg: 'https://cdn-icons-png.flaticon.com/128/4222/4222017.png' },
-        { name: 'Settings', componentName: SettingsPage, iconImg: 'https://cdn-icons-png.flaticon.com/128/2698/2698011.png' },
+        { name: 'Dashboard', componentName: TabBarNavigation, iconImg: 'https://cdn-icons-png.flaticon.com/128/1828/1828765.png' },
+        { name: 'Chat', componentName: Chat, iconImg: 'https://cdn-icons-png.flaticon.com/128/3114/3114553.png' },
+        { name: 'Restaurants', componentName: Restaurants, iconImg: 'https://cdn-icons-png.flaticon.com/128/710/710923.png' },
+        { name: 'App Preferences', componentName: AppPreferences, iconImg: 'https://cdn-icons-png.flaticon.com/128/2805/2805373.png' },
+        { name: 'Support & Feedback', componentName: SupportFeedback, iconImg: 'https://cdn-icons-png.flaticon.com/128/14676/14676358.png' },
+        { name: 'Settings', componentName: Settings, iconImg: 'https://cdn-icons-png.flaticon.com/128/2040/2040504.png' },
     ]
 
     return (

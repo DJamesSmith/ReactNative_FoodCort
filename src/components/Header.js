@@ -9,17 +9,17 @@ const Header = (props) => {
     function isleftPress() {
         if (props?.onLeftPress) {
             props?.onLeftPress()
-            console.log("onLeftPress")// Called when you want to use it as an attribute for Header Component
+            // console.log("onLeftPress")// Called when you want to use it as an attribute for Header Component
         }
-        console.log("isleftPress")
+        // console.log("isleftPress")
     }
 
     function isRightPress() {
         if (props?.onRightPress) {
             props?.onRightPress()
-            console.log("onRightPress")// Called when you want to use it as an attribute for Header Component
+            // console.log("onRightPress")// Called when you want to use it as an attribute for Header Component
         }
-        console.log("isRightPress")
+        // console.log("isRightPress")
     }
 
     return (
@@ -41,13 +41,16 @@ const Header = (props) => {
                 props?.leftIcon ? <TouchableOpacity
                     // disabled={props?.onLeftPress ? false : true}
                     onPress={() => isleftPress()}
+                    activeOpacity={0.7}
                     style={{
+                        backgroundColor: props?.leftIconBackgroundColor,
                         height: '100%',
                         width: normalize(40),
                         position: 'absolute',
-                        left: 5,
+                        left: props?.leftIconLeft,
                         justifyContent: 'center',
                         alignItems: 'center',
+                        borderRadius: 24
                         // top: -5,
                     }}>
 
@@ -71,7 +74,7 @@ const Header = (props) => {
                         fontWeight: '600',
                         fontSize: props?.fontSize,
                         fontFamily: props?.titleFontFamily,
-                        // top: -5
+                        top: props?.titleTop
                     }}>
                         {props?.title}
                     </Text> : null
@@ -80,14 +83,17 @@ const Header = (props) => {
             {
                 props?.rightIcon ? <TouchableOpacity
                     onPress={() => isRightPress()}
+                    activeOpacity={0.7}
                     style={{
+                        backgroundColor: Colors.white,
                         height: '100%',
                         width: normalize(40),
                         position: 'absolute',
-                        right: 0,
+                        right: props?.rightIconRight,
                         justifyContent: 'center',
                         alignItems: 'center',
-                        top: -5
+                        borderRadius: 24
+                        // top: -5
                     }}>
                     <Image
                         source={props?.rightIcon}
@@ -100,20 +106,41 @@ const Header = (props) => {
                 </TouchableOpacity> : props?.rightText ? (
                     <TouchableOpacity
                         onPress={() => isRightPress()}
+                        disabled={props?.isDisabled}
                         style={{
                             position: 'absolute',
-                            right: 20,
+                            right: props?.rightTextRight,
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
                         <Text style={{
                             color: props?.rightTextColor,
                             fontSize: props?.rightTextFontSize,
+                            fontFamily: props?.rightTextFontFamily,
+                            top: props?.rightTextTop,
                         }}>
                             {props.rightText}
                         </Text>
                     </TouchableOpacity>
-                ) : null
+                ) : props?.rightMenu ?
+                    <TouchableOpacity
+                        onPress={() => isRightPress()}
+                        style={{
+                            position: 'absolute',
+                            right: props?.rightTextRight,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                        <Image
+                            source={{ uri: `https://cdn-icons-png.flaticon.com/128/15730/15730926.png` }}
+                            style={{
+                                height: 24,
+                                width: 24,
+                                resizeMode: 'contain',
+                                tintColor: props?.rightIconTintColor
+                            }}
+                        />
+                    </TouchableOpacity> : null
             }
         </View>
     )
@@ -133,10 +160,15 @@ Header.propTypes = {
     borderBottomColor: PropTypes.string,
     titleFontFamily: PropTypes.string,
     borderBottomWidth: PropTypes.number,
+    leftIconLeft: PropTypes.number,
+    rightIconRight: PropTypes.number,
+    titleTop: PropTypes.number,
+
 
     leftIcon: PropTypes.any,
     onLeftPress: PropTypes.func,
     leftIconSize: PropTypes.number,
+    leftIconBackgroundColor : PropTypes.string,
     leftIconTintColor: PropTypes.string,
 
     rightIcon: PropTypes.any,
@@ -147,6 +179,10 @@ Header.propTypes = {
     rightText: PropTypes.string,
     rightTextColor: PropTypes.string,
     rightTextFontSize: PropTypes.number,
+    rightTextFontFamily: PropTypes.string,
+    rightTextTop: PropTypes.number,
+    rightTextRight: PropTypes.number,
+    isDisabled: PropTypes.bool,
 }
 
 Header.defaultProps = {
@@ -159,5 +195,9 @@ Header.defaultProps = {
     leftIconTintColor: 'black',
     rightIconSize: 30,
     rightIconTintColor: 'black',
-    marginTop: 40,
+    leftIconLeft: 35,
+    rightIconRight: 35,
+    rightTextRight: 20,
+    leftIconBackgroundColor: Colors.white,
+    // marginTop: 40,
 }

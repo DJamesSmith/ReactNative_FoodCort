@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView, ImageBackground } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MyStatusBar from '../../utils/MyStatusBar'
 import { Colors } from '../../themes/Colors'
 import { Icons } from '../../themes/Icons'
@@ -10,8 +10,8 @@ import SocialCustomButton from '../../components/SocialCustomButton'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header'
 import ImageCropPicker from 'react-native-image-crop-picker'
-import OTPVerificationBottomSheet from '../../utils/BottomSheets/OTPVerificationBottomSheet'
-import SuccessBottomSheet from '../../utils/BottomSheets/SuccessBottomSheet'
+import OTPVerificationBottomSheet from '../../utils/bottomSheets/OTPVerificationBottomSheet'
+import SuccessBottomSheet from '../../utils/bottomSheets/SuccessBottomSheet'
 import showErrorAlert from '../../utils/helpers/Toast'
 import { registerRequest, verifyRequest } from '../../redux/reducers/AuthReducer'
 import isInternetConnected from '../../utils/helpers/NetInfo'
@@ -83,8 +83,8 @@ const Register = ({ navigation }) => {
         })
             .then(image => {
                 const imageUri = image.path
-                console.log(`ImagePath: ${imageUri}`)
-                console.log(`ImageFilename: ${image.filename}`)
+                // console.log(`ImagePath: ${imageUri}`)
+                // console.log(`ImageFilename: ${image.filename}`)
 
                 let imageObj = {
                     name: image.filename ? image.filename : 'upload_image',
@@ -102,42 +102,46 @@ const Register = ({ navigation }) => {
     const [isOTPVerificationModalVisible, setIsOTPVerificationModalVisible] = useState(false)
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false)
 
-    if (AuthReducer?.status !== status || status == '') {
-        switch (AuthReducer?.status) {
-            case 'Auth/registerRequest':
-                status = AuthReducer?.status
-                console.log('-->> registerRequestUI')
-                break
-            case 'Auth/registerSuccess':
-                status = AuthReducer?.status
-                console.log('-->> registerSuccessUI')
-                setTimeout(() => {
-                    setIsOTPVerificationModalVisible(true)
-                }, 1000);
-                break
-            case 'Auth/registerFailure':
-                status = AuthReducer?.status
-                console.log('-->> registerFailureUI')
-                break
+    useEffect(() => {
+        if (AuthReducer?.status !== status || status == '') {
+            switch (AuthReducer?.status) {
+                case 'Auth/registerRequest':
+                    status = AuthReducer?.status
+                    console.log('-->> registerRequestUI')
+                    break
+                case 'Auth/registerSuccess':
+                    status = AuthReducer?.status
+                    console.log('-->> registerSuccessUI')
+                    setTimeout(() => {
+                        setIsOTPVerificationModalVisible(true)
+                    }, 1000);
+                    break
+                case 'Auth/registerFailure':
+                    status = AuthReducer?.status
+                    console.log('-->> registerFailureUI')
+                    break
 
 
-            case 'Auth/verifyRequest':
-                status = AuthReducer?.status
-                console.log('-->> verifyRequestUI')
-                break
-            case 'Auth/verifySuccess':
-                status = AuthReducer?.status
-                console.log('-->> verifySuccessUI')
-                navigation.navigate('Login')
-                break
-            case 'Auth/verifyFailure':
-                status = AuthReducer?.status
-                console.log('-->> verifyFailureUI')
-                break
-            default:
-            // console.log(`Sorry, we are out of ${expr}.`)
+                case 'Auth/verifyRequest':
+                    status = AuthReducer?.status
+                    console.log('-->> verifyRequestUI')
+                    break
+                case 'Auth/verifySuccess':
+                    status = AuthReducer?.status
+                    console.log('-->> verifySuccessUI')
+                    navigation.navigate('Login')
+                    break
+                case 'Auth/verifyFailure':
+                    status = AuthReducer?.status
+                    console.log('-->> verifyFailureUI')
+                    showErrorAlert('Verification failed. Please try again.')
+                    break
+                default:
+                    break
+            }
         }
-    }
+    }, [AuthReducer])
+
 
     const [verifyInfo, setVerifyInfo] = useState({
         contactData: '',
@@ -196,7 +200,7 @@ const Register = ({ navigation }) => {
         setVerifyInfo({ otp: otpValue, contactData: userInfo.contactData })
     }
 
-    console.log("handleVerification", verifyInfo)
+    // console.log("handleVerification", verifyInfo)
 
     const handleVerification = () => {
         const { contactData, otp } = verifyInfo
@@ -262,8 +266,12 @@ const Register = ({ navigation }) => {
                 leftIcon={Icons.back}
                 leftIconTintColor={Colors.black}
                 leftIconSize={20}
+                titleTop={2}
+                titleFontFamily={Fonts.SF_Compact_Rounded_Medium}
                 onLeftPress={() => navigation.goBack()}
 
+                leftIconLeft={10}
+                marginTop={20}
                 title={`Register`}
             />
 

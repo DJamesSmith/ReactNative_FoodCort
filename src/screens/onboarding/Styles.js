@@ -24,6 +24,7 @@ propStyle = _b => {
 export const Styles = {
     SplashStyle: StyleSheet.create({
         container: {
+            // backgroundColor: Colors.white,
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -31,7 +32,7 @@ export const Styles = {
     }),
     OnboardingStyle: StyleSheet.create({
         container: {
-            // backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
             flex: 1,
         },
         onboardImg: {

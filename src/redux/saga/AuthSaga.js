@@ -1,5 +1,4 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import _ from 'lodash'
 import {
     setToken,
     setLoginToken,
@@ -33,6 +32,8 @@ import { postApi, fetchPost } from '../../utils/helpers/ApiRequest'
 import showErrorAlert from '../../utils/helpers/Toast'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import constants from '../../utils/helpers/constants'
+import { getUserDetailsSuccess } from '../reducers/UserReducer'
+import { Colors } from '../../themes/Colors'
 
 let getItemAuth = state => state.AuthReducer
 
@@ -59,25 +60,25 @@ export function* registerSaga(action) {
     try {
         let response = yield call(postApi, 'user/register', action.payload, header)
 
-        console.log(`SagaResponse: ${JSON.stringify(response.data)}`)
-        console.log('Registrationresponse:', response)
+        // console.log(`SagaResponse: ${JSON.stringify(response.data)}`)
+        // console.log('Registrationresponse:', response)
 
         if (response?.status == 200) {
             yield put(registerSuccess(response?.data))
 
-            showErrorAlert(`OTP has successfully been sent to your contact.`)
+            showErrorAlert(`OTP has successfully been sent to your contact.`, Colors.blue)
         } else {
             yield put(registerFailure(response?.data?.data))
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.red)
         }
     } catch (error) {
         yield put(registerFailure(error.message))
         console.log('error -- ', error)
 
         if (error.response && error.response.data && error.response.data.message) {
-            showErrorAlert(error.response.data.message)
+            showErrorAlert(error.response.data.message, Colors.red)
         } else {
-            showErrorAlert('An error occurred during registration. Please try again later.')
+            showErrorAlert('An error occurred during registration. Please try again later.', Colors.red)
         }
     }
 }
@@ -94,25 +95,25 @@ export function* verifySaga(action) {
     try {
         let response = yield call(postApi, 'user/verify', action.payload, header)
 
-        console.log(`SagaResponse: ${JSON.stringify(response.data)}`)
-        console.log('VerificationResponse:', response)
+        // console.log(`SagaResponse: ${JSON.stringify(response.data)}`)
+        // console.log('VerificationResponse:', response)
 
         if (response?.status == 200) {
             yield put(verifySuccess(response?.data))
 
-            showErrorAlert('Congratulations, your account has successfully been created.')
+            showErrorAlert('Congratulations, your account has successfully been created.', Colors.blue)
         } else {
             yield put(verifyFailure(response?.data?.data))
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.red)
         }
     } catch (error) {
         yield put(verifyFailure(error.message))
         console.log('error -- ', error)
 
         if (error.response && error.response.data && error.response.data.message) {
-            showErrorAlert(error.response.data.message)
+            showErrorAlert(error.response.data.message, Colors.red)
         } else {
-            showErrorAlert('An error occurred during registration. Please try again later.')
+            showErrorAlert('An error occurred during registration. Please try again later.', Colors.red)
         }
     }
 }
@@ -127,7 +128,7 @@ export function* loginSaga(action) {
     try {
         let response = yield call(postApi, 'user/login', action.payload, header)
 
-        console.log(`responseLoginSaga: ${JSON.stringify(response)}`)
+        // console.log(`responseLoginSaga: ${JSON.stringify(response)}`)
 
         if (response?.status == 200) {
             yield put(loginSuccess(response?.data?.data))
@@ -136,10 +137,10 @@ export function* loginSaga(action) {
             yield AsyncStorage.setItem(constants.TOKEN, response?.data?.token)
             yield put(setToken(response?.data?.token))
 
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.blue)
         } else {
             yield put(loginFailure(response?.data?.data))
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.red)
         }
     } catch (error) {
         console.log('error -- ', error)
@@ -147,11 +148,11 @@ export function* loginSaga(action) {
         if (error?.response?.data?.status == 401) {
             // console.log(`Failure?.token========>>>> ${error?.response?.data?.token}`)
             yield put(setLoginToken(error?.response?.data?.token))
-            showErrorAlert(error?.response?.data?.message)
+            showErrorAlert(error?.response?.data?.message, Colors.red)
         } else if (error.response && error.response.data && error.response.data.message) {
-            showErrorAlert(error.response.data.message)
+            showErrorAlert(error.response.data.message, Colors.red)
         } else {
-            showErrorAlert('An error occurred during login. Please try again later.')
+            showErrorAlert('An error occurred during login. Please try again later.', Colors.red)
         }
         yield put(loginFailure(error))
     }
@@ -172,23 +173,23 @@ export function* validateLoginSaga(action) {
         // console.log(`action.payload: ${JSON.stringify(action.payload)}`)
 
         let response = yield call(postApi, 'user/login-validate', action.payload, header)
-        console.log(`response: ${JSON.stringify(response)}`)
+        // console.log(`response: ${JSON.stringify(response)}`)
 
         if (response?.status == 200) {
             yield put(validateLoginSuccess(response?.data?.data))
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.blue)
         } else {
             yield put(validateLoginFailure(response?.data?.data))
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.red)
         }
     } catch (error) {
         console.log('error -- ', error)
         yield put(validateLoginFailure(error))
 
         if (error.response && error.response.data && error.response.data.message) {
-            showErrorAlert(error.response.data.message)
+            showErrorAlert(error.response.data.message, Colors.red)
         } else {
-            showErrorAlert('An error occurred during login. Please try again later.')
+            showErrorAlert('An error occurred during login. Please try again later.', Colors.red)
         }
     }
 }
@@ -208,19 +209,19 @@ export function* forgotPasswordSaga(action) {
             yield put(forgotPasswordSuccess(response?.data?.data))
 
             yield put(setForgotPasswordToken(response?.data?.token))
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.blue)
         } else {
             yield put(forgotPasswordFailure(response?.data?.data))
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.red)
         }
     } catch (error) {
         yield put(forgotPasswordFailure(error))
         console.log('error -- ', error)
 
         if (error.response && error.response.data && error.response.data.message) {
-            showErrorAlert(error.response.data.message)
+            showErrorAlert(error.response.data.message, Colors.red)
         } else {
-            showErrorAlert('An error occurred during login. Please try again later.')
+            showErrorAlert('An error occurred during login. Please try again later.', Colors.red)
         }
     }
 }
@@ -240,19 +241,19 @@ export function* validateOTPSaga(action) {
         if (response?.status == 200) {
             yield put(validateOTPSuccess(response?.data?.data))
 
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.blue)
         } else {
             yield put(validateOTPFailure(response?.data?.data))
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.red)
         }
     } catch (error) {
         yield put(validateOTPFailure(error))
         console.log('error -- ', error)
 
         if (error.response && error.response.data && error.response.data.message) {
-            showErrorAlert(error.response.data.message)
+            showErrorAlert(error.response.data.message, Colors.red)
         } else {
-            showErrorAlert('An error occurred during login. Please try again later.')
+            showErrorAlert('An error occurred during login. Please try again later.', Colors.red)
         }
     }
 }
@@ -273,19 +274,19 @@ export function* updatePasswordSaga(action) {
         if (response?.status == 200) {
             yield put(updatePasswordSuccess(response?.data))
 
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.blue)
         } else {
             yield put(updatePasswordFailure(response?.data?.data))
-            showErrorAlert(response?.data?.message)
+            showErrorAlert(response?.data?.message, Colors.red)
         }
     } catch (error) {
         yield put(updatePasswordFailure(error))
         console.log('error -- ', error)
 
         if (error.response && error.response.data && error.response.data.message) {
-            showErrorAlert(error.response.data.message)
+            showErrorAlert(error.response.data.message, Colors.red)
         } else {
-            showErrorAlert('An error occurred during login. Please try again later.')
+            showErrorAlert('An error occurred during login. Please try again later.', Colors.red)
         }
     }
 }
@@ -296,6 +297,7 @@ export function* logoutSaga(action) {
     try {
         yield AsyncStorage.removeItem(constants.TOKEN)
         yield put(logoutSuccess())
+        yield put(getUserDetailsSuccess({}))
     } catch (error) {
         yield put(logoutFailure())
     }
@@ -332,6 +334,6 @@ const watchFunction = [
     (function* () {
         yield takeLatest('Auth/logoutRequest', logoutSaga)
     })(),
-];
+]
 
 export default watchFunction

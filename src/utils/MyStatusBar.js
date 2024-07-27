@@ -8,7 +8,7 @@ const STATUSBAR_HEIGHT = StatusBar.currentHeight
 const MyStatusBar = ({ backgroundColor, barStyle, ...props }) => (
     <SafeAreaView style={Platform.OS === 'ios' && [{ backgroundColor }]}>
         <StatusBar
-            translucent={true}
+            // translucent={true}
             backgroundColor={backgroundColor}
             barStyle={barStyle}
             hidden={false}

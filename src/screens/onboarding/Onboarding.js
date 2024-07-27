@@ -54,7 +54,7 @@ const Onboarding = ({ navigation }) => {
                         // backgroundColor: Colors.blue,
                         width: width,
                         height: 400,
-                        marginTop: 60,
+                        marginTop: 30,
                         alignItems: 'center',
                     }}
                     key={index}>
@@ -96,7 +96,7 @@ const Onboarding = ({ navigation }) => {
 
     return (
         <>
-            <MyStatusBar backgroundColor={Colors.transparent} barStyle={'dark-content'} />
+            <MyStatusBar backgroundColor={Colors.white} barStyle={'dark-content'} />
             <View style={Styles.OnboardingStyle.container}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
                     <FlingGestureHandler

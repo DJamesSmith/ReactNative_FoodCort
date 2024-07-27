@@ -7,15 +7,16 @@ import CustomTextInput from '../../components/CustomTextInput'
 import { Fonts } from '../../themes/Fonts'
 import CustomButton from '../../components/CustomButton'
 import SocialCustomButton from '../../components/SocialCustomButton'
-import ContactVerificationBottomSheet from '../../utils/BottomSheets/ContactVerificationBottomSheet'
-import CreateNewPasswordBottomSheet from '../../utils/BottomSheets/CreateNewPasswordBottomSheet'
-import OTPVerificationBottomSheet from '../../utils/BottomSheets/OTPVerificationBottomSheet'
-import SuccessBottomSheet from '../../utils/BottomSheets/SuccessBottomSheet'
+import ContactVerificationBottomSheet from '../../utils/bottomSheets/ContactVerificationBottomSheet'
+import CreateNewPasswordBottomSheet from '../../utils/bottomSheets/CreateNewPasswordBottomSheet'
+import OTPVerificationBottomSheet from '../../utils/bottomSheets/OTPVerificationBottomSheet'
+import SuccessBottomSheet from '../../utils/bottomSheets/SuccessBottomSheet'
 import { useDispatch, useSelector } from 'react-redux'
 import { forgotPasswordRequest, loginRequest, updatePasswordRequest, validateLoginRequest, validateOTPRequest } from '../../redux/reducers/AuthReducer'
 import Loader from '../../utils/helpers/Loader'
 import showErrorAlert from '../../utils/helpers/Toast'
 import isInternetConnected from '../../utils/helpers/NetInfo'
+import Header from '../../components/Header'
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
 const mobileNumberRegex = /^\+\d{1,15}$/
@@ -211,9 +212,7 @@ const Login = ({ navigation }) => {
                 .then(() => {
                     dispatch(loginRequest(payload))
                 })
-                .catch(err => {
-                    showErrorAlert('Please connect to the internet')
-                })
+                .catch(err => showErrorAlert(`Please connect to the internet to correct the ${err} status of your network`, Colors.red))
         } else {
             showErrorAlert('Please enter contact and password')
         }
@@ -234,9 +233,7 @@ const Login = ({ navigation }) => {
                 .then(() => {
                     dispatch(validateLoginRequest(payloadVerify))
                 })
-                .catch(err => {
-                    showErrorAlert('Please connect to the internet')
-                })
+                .catch(err => showErrorAlert(`Please connect to the internet to correct the ${err} status of your network`, Colors.red))
         } else {
             showErrorAlert('Please enter the OTP')
         }
@@ -275,9 +272,7 @@ const Login = ({ navigation }) => {
                 .then(() => {
                     dispatch(forgotPasswordRequest(payloadSendCode))
                 })
-                .catch(err => {
-                    showErrorAlert('Please connect to the internet')
-                })
+                .catch(err => showErrorAlert(`Please connect to the internet to correct the ${err} status of your network`, Colors.red))
         } else {
             showErrorAlert('Please enter Email or Phone Number')
         }
@@ -308,9 +303,7 @@ const Login = ({ navigation }) => {
                 .then(() => {
                     dispatch(validateOTPRequest(payloadVerifyOTP))
                 })
-                .catch(err => {
-                    showErrorAlert('Please connect to the internet')
-                })
+                .catch(err => showErrorAlert(`Please connect to the internet to correct the ${err} status of your network`, Colors.red))
         } else {
             showErrorAlert('Please enter OTP')
         }
@@ -354,9 +347,7 @@ const Login = ({ navigation }) => {
                 .then(() => {
                     dispatch(updatePasswordRequest(payloadValidate))
                 })
-                .catch(err => {
-                    showErrorAlert('Please connect to the internet')
-                })
+                .catch(err => showErrorAlert(`Please connect to the internet to correct the ${err} status of your network`, Colors.red))
         } else {
             showErrorAlert('Please enter password & confirm')
         }
@@ -373,9 +364,7 @@ const Login = ({ navigation }) => {
             .then(() => {
                 dispatch(loginRequest(payload))
             })
-            .catch(err => {
-                showErrorAlert('Please connect to the internet')
-            })
+            .catch(err => showErrorAlert(`Please connect to the internet to correct the ${err} status of your network`, Colors.red))
     }
 
     // console.log(`updateContact: ${updatePassword.updateContact} \t confirmPassword: ${updatePassword.confirmPassword}`)
@@ -393,9 +382,7 @@ const Login = ({ navigation }) => {
             .then(() => {
                 dispatch(loginRequest(payload))
             })
-            .catch(err => {
-                showErrorAlert('Please connect to the internet')
-            })
+            .catch(err => showErrorAlert(`Please connect to the internet to correct the ${err} status of your network`, Colors.red))
     }
 
     const btnHandleResendCodeForForgotPassword = () => {
@@ -407,9 +394,7 @@ const Login = ({ navigation }) => {
             .then(() => {
                 dispatch(forgotPasswordRequest(payloadSendCode))
             })
-            .catch(err => {
-                showErrorAlert('Please connect to the internet')
-            })
+            .catch(err => showErrorAlert(`Please connect to the internet to correct the ${err} status of your network`, Colors.red))
     }
 
     return (
@@ -417,7 +402,7 @@ const Login = ({ navigation }) => {
             <MyStatusBar backgroundColor={Colors.transparent} barStyle={'dark-content'} />
             <Loader visible={AuthReducer?.status == 'Auth/loginRequest'} />
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 style={loginStyles.btnBack}
                 onPress={() => navigation.goBack()}
                 activeOpacity={0.8}>
@@ -425,7 +410,21 @@ const Login = ({ navigation }) => {
                     source={Icons.back}
                     style={loginStyles.imgBack}
                 />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+
+            <Header
+                // backgroundColor={Colors.red}
+                leftIcon={Icons.back}
+                leftIconTintColor={Colors.black}
+                leftIconSize={20}
+                titleFontFamily={Fonts.SF_Compact_Rounded_Medium}
+                titleTop={2}
+                onLeftPress={() => navigation.goBack()}
+
+                leftIconLeft={10}
+                marginTop={20}
+                title={`Sign In`}
+            />
 
             <ScrollView style={loginStyles.scrollerView} showsVerticalScrollIndicator={false}>
                 <Text style={loginStyles.txtHeader}>Login</Text>
@@ -547,7 +546,7 @@ const Login = ({ navigation }) => {
                     alignItems={'center'}
                     borderColor={Colors.mediumGrey}
                     borderWidth={0.7}
-                    onPressFunc={() => { }}
+                    url={'https://accounts.google.com/servicelogin?hl=en-gb'}
                 />
 
                 <SocialCustomButton
@@ -561,7 +560,7 @@ const Login = ({ navigation }) => {
                     alignItems={'center'}
                     borderColor={Colors.mediumGrey}
                     borderWidth={0.7}
-                    onPressFunc={() => { }}
+                    url={'https://accounts.google.com/servicelogin?hl=en-gb'}
                 />
             </ScrollView>
 

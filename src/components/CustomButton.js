@@ -9,7 +9,7 @@ import { Fonts } from '../themes/Fonts'
 
 const { height, width } = Dimensions.get('screen')
 
-const CustomButton = (props) => {
+const CustomButton = props => {
     const isPressFunc = () => {
         if (props?.onPressFunc) {
             props?.onPressFunc()
@@ -18,12 +18,14 @@ const CustomButton = (props) => {
         // console.log("isPress")
     }
 
+    const isButtonDisabled = props?.isDisabled === 0
+
     return (
         <>
             {
                 props?.title ? <TouchableOpacity
                     style={{
-                        backgroundColor: props?.BGColor,
+                        backgroundColor: isButtonDisabled ? Colors.mediumGrey : props?.BGColor,
                         height: props?.viewHeight,
                         width: props?.width,
                         borderRadius: props.borderRadius,
@@ -42,6 +44,7 @@ const CustomButton = (props) => {
                         shadowRadius: props?.shadowRadius,
                         elevation: props?.elevation,
                     }}
+                    disabled={isButtonDisabled}
                     activeOpacity={0.8}
                     onPress={() => isPressFunc()}>
                     {
@@ -65,6 +68,7 @@ const CustomButton = (props) => {
                                 fontFamily: props?.fontFamily,
                                 position: 'absolute',
                                 left: props?.left,
+                                top: props?.titleTop,
                             }}>
                             {props?.title}
                         </Text>
@@ -86,6 +90,7 @@ CustomButton.propTypes = {
     fontFamily: PropTypes.string,
     imageLeft: PropTypes.number,
     title: PropTypes.string,
+    titleTop: PropTypes.number,
     tintColor: PropTypes.string,
     loading: PropTypes.bool,
 
@@ -108,6 +113,7 @@ CustomButton.propTypes = {
     borderWidth: PropTypes.number,
     paddingHorizontal: PropTypes.number,
     marginTop: PropTypes.number,
+    isDisabled: PropTypes.number
 }
 
 const viewHeight = 48
